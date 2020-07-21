@@ -1,0 +1,216 @@
+<!-- Step 1 --->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Step 2 --->
+<script>
+	var sockets=new Array();
+	var cntrlProp=new Array();
+	var monitor=[];
+	var wssBASE = 'wss-public.executium.com';
+
+	function socket_connect(id,wss,out)
+	{
+		try
+		{
+			console.log('ID: '+id+' | Attempting: '+wss);
+			sockets[id] = io(wss, {'reconnection': true,'reconnectionDelay': 500,'reconnectionDelayMax':500,'reconnectionAttempts': 100});
+
+			sockets[id].on('connect', function()
+			{
+				console.log('ID: '+id+' | Connected: '+wss);
+				socket_output(id,out,'connect');
+			});
+
+			sockets[id].on(id,'disconnect', function()
+			{
+				console.log('ID: '+id+' Disconnected: '+wss);
+				socket_output(id,out,'disconnect');
+
+			});
+
+			sockets[id].on('connect_error', function(e)
+			{
+				console.log('ID: '+id+' | Error: '+wss,e);
+				socket_output(id,out,'connectionerror');
+
+			});
+		}
+		catch(e)
+		{
+			console.log('Socket - Internal Data Issue',e);
+		}
+	}
+
+	function socket_output(id,oc,rsp)
+	{
+		switch(oc)
+		{
+			case 'obreq':
+				manage_orderbook_request(id,rsp);
+				break;
+			case 'ob':
+				manage_orderbook_data(id,rsp);
+				break;
+		}
+	}
+
+	function request_orderbook_server(exchange,symbol,side)
+	{
+		var output = side+'-'+exchange+'-'+symbol;
+		sockets[wssBASE].send({'req':exchange,'s':symbol,'o':output});
+	}
+
+	function manage_orderbook_data(id,rsp)
+	{
+		sockets[id].on('mvsym', function(data)
+		{
+			console.log('Symbol Moved Server ->'+data.n,data);
+			unsubscribe_from_orderbook(id,cntrlProp[data.n]);
+			var a = data.n.split('-');
+
+			$('.'+data.n+'-price').empty().html('');
+			$('.'+data.n+'-qty').empty().html('');
+			$('.'+data.n+'-ago').empty().html('');
+			$('.'+data.n+'-com').empty().html('');
+
+			request_orderbook_server(a[1],a[2],data.n);
+
+		});
+		sockets[id].on('dp', function(data)
+		{
+			try
+			{
+				var j=JSON.parse(data.d);
+				var n=data.n.replace('/','-');
+				var ago = new Date().getTime()-j[2];
+				var side = n.split('-')[0];
+
+				var p = parseFloat(j[0]).toFixed(8);
+				if(p<1)
+				{
+					var price=p;
+
+				}
+				else
+				{
+					var price=numeral(p);
+					price=price.format('0,0.00000000');
+				}
+
+				var qty=numeral(j[1]);
+				$('.price-'+n).empty().html( price );
+				$('.qty-'+n).empty().html( qty.format('0,0.00000000') );
+				$('.ago-'+n).empty().html( ago );
+				$('.server-'+n).empty().html( id );
+
+				// Only for bids in this example
+				if(side=='bids') {
+					if(typeof monitor[n] === 'undefined') { monitor[n]=price;}
+
+					var transition=''; var rm=true;
+					if(price < monitor[n]) { var transition='transition-down'; }
+					if(price > monitor[n]) { var transition='transition-up'; }
+					if(ago > 60000*5) { var transition='transition-bad'; rm=false;}
+
+					if (transition != '') {
+						$('.row-' + n).addClass(transition);
+
+						if(rm===true) {
+							setTimeout(function () {
+								$('.row-' + n).removeClass(transition);
+							}, 110);
+						}
+					}
+
+					monitor[n] = price;
+				}
+			}
+			catch(e)
+			{
+				console.log('error',e);
+			}
+		});
+
+	}
+
+	function manage_orderbook_request(id,rsp)
+	{
+		sockets[id].on('obreq', function(data)
+		{
+			var delay=0;
+			if(typeof sockets[data.n] === 'undefined')
+			{
+				if(data.n=='notavailable')
+				{
+					console.warn('Issue',data); $('.'+data.o+'-price').empty().html( 'Not available or running - '+data.s);
+					delay=-1;
+				}
+				else
+				{
+					socket_connect(data.n,'https:\/\/'+data.n+':2083','ob');
+					delay=1000;
+
+				}
+			}
+
+			if(delay>-1)
+			{
+				// timeout measure temp
+				setTimeout(function()
+				{
+					var s=data.o.split('-');
+					if(s[0]=='bids' || s[0]=='asks')
+					{
+						controllerOb(data.n,data.o,s[0],data.s,1,data.o);
+					}
+
+				},delay);
+			}
+
+		});
+	}
+
+	function controllerOb(id,cid,side,sym,lvl,a)
+	{
+		var subtag=side+'/'+sym+'-'+lvl;
+		if(typeof cntrlProp[cid] !== 'undefined')
+		{
+			// Unsubscribe
+			unsubscribe_from_orderbook(id,cntrlProp[cid]);
+		}
+
+		$('.'+a+'-price').empty().html('<span class="price-'+subtag.replace("/","-")+'"></span>');
+		$('.'+a+'-qty').empty().html('<span class="qty-'+subtag.replace("/","-")+'"></span>');
+		$('.'+a+'-ago').empty().html('<span class="ago-'+subtag.replace("/","-")+' ago"></span>');
+
+		cntrlProp[cid]=subtag;
+		subscribe_to_orderbook(id,subtag);
+	}
+
+	function unsubscribe_from_orderbook(id,a)
+	{
+		sockets[id].send({'unsubscribe':a});
+	}
+
+	function subscribe_to_orderbook(id,tag)
+	{
+		sockets[id].send({'subscribe':tag});
+	}
+</script>
+
+<!-- Adding seperate script section for illustration purposes. --->
+<!-- Step 3 and 4 --->
+<script>
+	//
+	socket_connect(wssBASE,'https:\/\/'+wssBASE+':2083','obreq');
+	//
+	request_orderbook_server('binance', 'btcusdt', 'bids');
+
+</script>
+<!-- Step 5 --->
+
+<div class="bids-binance-btcusdt-price">&hellip;</div>
+<div class="bids-binance-btcusdt-qty">&hellip;</div>
+<div class="bids-binance-btcusdt-ago ago">&hellip;</div>
