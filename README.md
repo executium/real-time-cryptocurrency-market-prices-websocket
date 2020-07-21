@@ -19,6 +19,8 @@ Emphasis on speed and availability
 ## Online Example
 You can view an online example at the following address: [https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/](https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/)
 
+![Realtime symbols delivered via websocket](https://i.imgur.com/76SjPfo.png)
+
 ### CDN
 You can access the CDN by including the following:
 
@@ -43,7 +45,6 @@ socket_connect(wssBASE,'https:\/\/'+wssBASE+':2083','obreq');
 request_orderbook_server('bitfinex', 'btcusd', 'bids');
 
 ```
-
 
 ## How the websocket works
 Due to the volume of market pairs/symbols we carry across a wide array of exchanges, we have a method of `request-location` and `access-feed` to establish the correct websocket in which you should access.
