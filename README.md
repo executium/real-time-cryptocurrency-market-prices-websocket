@@ -6,6 +6,7 @@ A complete look at the available websockets and how you can use them to implemen
 - [Introduction](#introduction)
   - [CDN](#cdn)
   - [Running the service](#running-the-service)
+  - [Time considerations](#time-considerations)
 - [Online Example](#online-example)
 - [How the websocket works](#how-the-websocket-works)
 - [Code breakdown](#code-breakdown)
@@ -14,7 +15,7 @@ A complete look at the available websockets and how you can use them to implemen
 - [License](#license-related-to-code)
 
 ## Introduction
-Emphasis on speed and availability
+The weboscket has an emphasis on speed and availability. The code and access is geared towards devlopers and traders who have a thirst for comparable data points. You could use this repo for example to build algorithms that directly lock into the executium signals marketplace.
 
 ## Online Example
 You can view an online example at the following address: [https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/](https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/)
@@ -45,6 +46,9 @@ socket_connect(wssBASE,'https:\/\/'+wssBASE+':2083','obreq');
 request_orderbook_server('bitfinex', 'btcusd', 'bids');
 
 ```
+
+### Time considerations
+You will note in the demo that we put an emphasis on time. We provide tools to promote transparency and a test bed to make sure that you are confident with the results you are getting back. You can find the [check time offset extract here](https://github.com/executium/real-time-cryptocurrency-market-prices-websocket/blob/master/examples/check-time-offset.html).
 
 ## How the websocket works
 Due to the volume of market pairs/symbols we carry across a wide array of exchanges, we have a method of `request-location` and `access-feed` to establish the correct websocket in which you should access.
