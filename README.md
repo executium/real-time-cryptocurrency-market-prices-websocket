@@ -1,6 +1,8 @@
 # Real-time cryptocurrency market prices access with the executium websocket
 A complete look at the available websockets and how you can use them to implement the executium market data into your own projects.
 
+![Real-time crypto market prices websocket](https://i.imgur.com/VGeP4EG.png)
+
 - [Introduction](#introduction)
 - [Online Example](#online-example)
 - [How the websocket works](#how-the-websocket-works)
