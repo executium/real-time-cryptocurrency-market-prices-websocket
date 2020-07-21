@@ -4,6 +4,8 @@ A complete look at the available websockets and how you can use them to implemen
 ![Real-time crypto market prices websocket](https://i.imgur.com/VGeP4EG.png)
 
 - [Introduction](#introduction)
+  - [CDN](#cdn)
+  - [Running the service](#running-the-service)
 - [Online Example](#online-example)
 - [How the websocket works](#how-the-websocket-works)
 - [Code breakdown](#code-breakdown)
@@ -17,13 +19,39 @@ Emphasis on speed and availability
 ## Online Example
 You can view an online example at the following address: [https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/](https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/)
 
+### CDN
+You can access the CDN by including the following:
+
+```
+<script src="https://cdn.executium.com/media/dist/realtime-cryptocurrency-markets/min.js"></script>
+```
+
+The script relies on `jQuery`, `Numerals` and `Socket.io`, for a flawless installation include the following:
+```
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+```
+
+### Running the service
+When you want to connect to the server, have the following code example execute.
+```javascript
+
+// Connect to the Public Websocket
+socket_connect(wssBASE,'https:\/\/'+wssBASE+':2083','obreq');
+// Request Bitfinex BTCUSD
+request_orderbook_server('bitfinex', 'btcusd', 'bids');
+
+```
+
+
 ## How the websocket works
 Due to the volume of market pairs/symbols we carry across a wide array of exchanges, we have a method of `request-location` and `access-feed` to establish the correct websocket in which you should access.
 
 ![](https://i.imgur.com/lOPv6T7.jpg)
 
-- `teller` provides direction of where the symbol data resides, you then use this information to connect to the symbol data socket
-- `symbol-server` this is where you will connect to based on that information the `teller` provided.
+- `teller` provides direction of where the symbol data resides, you then use this information to connect to the symbol data socket which is currently the base point of `wss-socket.executium.com`.
+- `symbol-server` this is where you will connect to based on that information the `teller` provides back. These are subject to change and `mvsym` will indicate if a new server has taken control as it load balances itself.
 
 It is important to note, that these are always subject to change location, as they are balanced based on an overall network demand. When a symbol is rebalanced to a new location, the `mvsym` catch provides the mechanism for you to update your location. This code is provided in the example.
 
