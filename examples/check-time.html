@@ -1,0 +1,74 @@
+<!-- Include --->
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+
+<!-- Html --->
+
+<a class="pure-button button-warning" onclick="checkTime()">&#128336; Check Time Offset</a>
+
+<div class="code code-wrap"><pre style="display: block; overflow: auto; padding: 0.5em; color: rgb(0, 0, 0); background: rgb(248, 248, 255);"><code id="checktime">Click to discover your current time offset</code></pre></div>
+
+<!-- checkTime function --->
+
+<script>
+
+	function checkTime()
+	{
+		var checktime = $('#checktime');
+		checktime.empty().html('<div class="lds-hourglass"></div>');
+		var url = 'https://marketdata.executium.com/api/v2/system/ping';
+
+		var send = new Date().getTime();
+
+		$.ajax
+		({
+			type:"POST",
+			url:url,
+			data:'milliseconds='+new Date().getTime(),
+			cache:false,
+			crossDomain: true,
+			xhrFields: { withCredentials: true},
+			timeout:6000,
+			error: function(data)
+			{
+				console.log(data);
+				//
+				if(typeof data.responseJSON.data.error !=='undefined')
+				{
+					checktime.empty().html(data.responseJSON.data.error);
+				}
+				else
+				{
+					checktime.empty().html('Failed to load; Please view console.');
+				}
+			},
+			scriptCharset:"script",dataType:"",success:function(result)
+			{
+
+				var  h = '';
+				var took=(new Date().getTime() - send);
+
+				var d = result.data.difference - took;
+
+				if(d<0)
+				{
+					h='You are currently <strong>'+d+'ms</strong> behind the executium server';
+				}
+				else
+				{
+					h='You are currently <strong>'+d+'ms</strong> ahead of the executium server';
+				}
+
+				h+='<br> It took <strong>'+took+'ms</strong> for the request to send, receive and return.';
+
+				checktime.empty().html(h);
+
+			}
+
+		});
+
+		return true;
+	}
+
+</script>
