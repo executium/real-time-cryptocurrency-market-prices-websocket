@@ -20,7 +20,7 @@ The weboscket has an emphasis on speed and availability. The code and access is 
 ## Online Example
 You can view an online example at the following address: [https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/](https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/)
 
-![Realtime symbols delivered via websocket](https://i.imgur.com/76SjPfo.png)
+![Realtime symbols delivered via websocket](https://i.imgur.com/M6Tjsxn.jpg)
 
 ### CDN
 You can access the CDN by including the following:
