@@ -126,7 +126,7 @@ Pull the endpoints from the public server endpoint and then populate
 
 </script>
 
-<!-- Step 2 --->
+<!-- Step 3 --->
 <script>
 
 	// Global Varialbes
@@ -382,7 +382,7 @@ Pull the endpoints from the public server endpoint and then populate
 </script>
 
 <!-- Adding seperate script section for illustration purposes. --->
-<!-- Step 3 and 4 --->
+<!-- Step 4 --->
 <script>
 	//
 	socket_connect(wssBASE,'https:\/\/'+wssBASE+':2083','obreq');
@@ -390,8 +390,6 @@ Pull the endpoints from the public server endpoint and then populate
 	tableSymbols('binance');
 
 </script>
-<!-- Step 5 --->
-
 
 <!-- Optional Step -->
 <script>
