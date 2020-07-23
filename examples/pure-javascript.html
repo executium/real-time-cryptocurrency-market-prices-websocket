@@ -104,7 +104,7 @@
 			$('.'+data.n+'-ago').empty().html('');
 
 			//
-			request_orderbook_server(a[1],a[2],data.n);
+			request_orderbook_server(a[1],a[2],a[0]);
 
 		});
 		//
@@ -233,25 +233,25 @@
 
 		//
 		if(typeof subscription_location[id] === 'undefined') { subscription_location[id]=new Array(); }
-		//
+
 		subscription_property[cid]=subtag;
 		subscription_location[id][subtag]=sym;
-
-		//
 		subscribe_to_orderbook(id,subtag);
 	}
 
 	function unsubscribe_from_orderbook(id,a)
 	{
+		if(typeof subscription_location[id] != 'undefined') 
+		{ 
+			delete subscription_property[a];
+			if(typeof subscription_location[id][a] != 'undefined') { delete subscription_location[id][a]; }
+	        }
 
-		delete subscription_property[a];
-		delete subscription_location[id][a];
 		sockets[id].send({'unsubscribe':a});
 	}
 
 	function subscribe_to_orderbook(id,tag)
 	{
-		//
 		sockets[id].send({'subscribe':tag});
 	}
 
