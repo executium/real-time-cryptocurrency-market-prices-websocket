@@ -216,7 +216,7 @@ Pull the endpoints from the public server endpoint and then populate
 		//
 		sockets[id].on('mvsym', function(data)
 		{
-			console.log('Symbol Moved Server ->'+data.n,data);
+			console.log('Symbol Moved Server ->'+data.n,data,subscription_property[data.n],a);
 			//
 			unsubscribe_from_orderbook(id,subscription_property[data.n]);
 			//
@@ -227,7 +227,7 @@ Pull the endpoints from the public server endpoint and then populate
 			$('.'+data.n+'-ago').empty().html('');
 
 			//
-			request_orderbook_server(a[1],a[2],data.n);
+			request_orderbook_server(a[1],a[2],a[0]);
 
 		});
 		//
@@ -366,9 +366,13 @@ Pull the endpoints from the public server endpoint and then populate
 
 	function unsubscribe_from_orderbook(id,a)
 	{
+        console.log('Inarea','Unsubscribe',id,a);
+		if(typeof subscription_location[id] != 'undefined')
+		{
+			delete subscription_property[a];
+			if(typeof subscription_location[id][a] != 'undefined') { delete subscription_location[id][a]; }
+        }
 
-		delete subscription_property[a];
-		delete subscription_location[id][a];
 		sockets[id].send({'unsubscribe':a});
 	}
 
@@ -378,11 +382,10 @@ Pull the endpoints from the public server endpoint and then populate
 		sockets[id].send({'subscribe':tag});
 	}
 
-
 </script>
 
 <!-- Adding seperate script section for illustration purposes. --->
-<!-- Step 4 --->
+<!-- Step 4 and 5 --->
 <script>
 	//
 	socket_connect(wssBASE,'https:\/\/'+wssBASE+':2083','obreq');
