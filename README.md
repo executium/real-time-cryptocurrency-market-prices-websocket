@@ -47,6 +47,14 @@ request_orderbook_server('bitfinex', 'btcusd', 'bids');
 
 ```
 
+Make sure you have the classes on page to handle the output.
+
+```html
+<div class="bids-bitfinex-btcusd-price">&hellip;</div>
+<div class="bids-bitfinex-btcusd-qty">&hellip;</div>
+<div class="bids-bitfinex-btcusd-ago ago">&hellip;</div>
+```
+
 ### Time considerations
 You will note in the demo that we put an emphasis on time. We provide tools to promote transparency and a test bed to make sure that you are confident with the results you are getting back. You can find the [check time offset extract here](https://github.com/executium/real-time-cryptocurrency-market-prices-websocket/blob/master/examples/check-time-offset.html).
 
