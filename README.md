@@ -12,6 +12,7 @@ A complete look at the available websockets and how you can use them to implemen
 - [Code breakdown](#code-breakdown)
 - [Subscription for endpoint access](#subscription-for-endpoint-access)
   - [Fair usage](./FAIR-USAGE.md)
+- [User Projects](#user-projects)
 - [License](#license-related-to-code)
 
 ## Introduction
@@ -73,6 +74,11 @@ This section will serve as a region to breakdown in detail how the process of co
 
 ## Subscription for endpoint access
 Each domain serving is provided `fair-usage` terms. We do have additional tiers of subscription for users which use a lot more resource. You can use the executium market prices websocket within fair usage guidelines and if your project is freely available. If you are charging for access or behind any paywall you must purchase a subscription related to that.
+
+## User Projects
+As with all of our releases, please get in touch if you have a good usage case.
+
+- [Loui Webers cryptocurrency market pairs websocket](https://github.com/LouiWeber/cryptocurrency-market-pairs-websocket)
 
 ## License related to code
 
