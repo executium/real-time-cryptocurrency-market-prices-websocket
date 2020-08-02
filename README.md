@@ -16,7 +16,7 @@ A complete look at the available websockets and how you can use them to implemen
 - [License](#license-related-to-code)
 
 ## Introduction
-The weboscket has an emphasis on speed and availability. The code and access is geared towards devlopers and traders who have a thirst for comparable data points. You could use this repo for example to build algorithms that directly lock into the executium signals marketplace.
+The weboscket has an emphasis on speed and availability. The code and access is geared towards developers and traders who have a thirst for comparable data points. You could use this repo for example to build algorithms that directly lock into the executium signals marketplace.
 
 ## Online Example
 You can view an online example at the following address: [https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/](https://marketdata.executium.com/realtime-cryptocurrency-market-prices-websockets/)
