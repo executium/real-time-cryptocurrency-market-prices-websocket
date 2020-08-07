@@ -78,6 +78,7 @@ Each domain serving is provided `fair-usage` terms. We do have additional tiers 
 ## User Projects
 As with all of our releases, please get in touch if you have a good usage case.
 
+- [Crypto Websocket Plugin for Wordpress](https://wordpress.org/plugins/crypto-websocket/)
 - [Loui Webers cryptocurrency market pairs websocket](https://github.com/LouiWeber/cryptocurrency-market-pairs-websocket)
 
 ## License related to code
