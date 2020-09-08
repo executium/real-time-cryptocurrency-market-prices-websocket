@@ -26,7 +26,7 @@ socket.socket_connect(ExecutiumSocket.wssBASE, `https:\/\/${ExecutiumSocket.wssB
 
 ## Subscribe to live data for specific `exchange` and `symbol`
 
-To get the live updates for any specific exchange and symbol you need to make a requet to socket with your listener. This request is specific for `asks` & `bids` prices
+To get the live updates for any specific exchange and symbol you need to make a requet to socket with your listener. This request is specific for `asks` & `bids` prices.
 ```
 let exchnage = "bitfinex";
 let symbol = 'btcusdt';
@@ -52,7 +52,7 @@ Congratulations! With this you are ready to consume the live ask and bid updates
 ## Unsubscribe for specific `exchange` and `symbol`
 To unsubscribe we have 2 options 
 
-### 1. unsubscribe from symbol
+### 1. Unsubscribe from symbol
 This will unsubscribe you from ask as well as bid
 ```
 // Example: code='bitfinex-btcusd';
